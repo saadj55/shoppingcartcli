@@ -27,14 +27,7 @@ class BuyTwoGetHalfOffRepository implements OfferContract {
         return $count;
     }
     public function apply(){
-        $total_discount = 0;
-        foreach ($this->cart->products as $name => $product){
-            if ($name == $this->product->getName()) {
-                $total_discount = $this->countEvens(1, $product['quantity']) * ($this->product->getPrice()/2);
-            }
-        }
-
-        return $total_discount;
+        return $this->countEvens(1, $this->cart->products[$this->product->getName()]['quantity']) * ($this->product->getPrice()/2);
     }
 
 }

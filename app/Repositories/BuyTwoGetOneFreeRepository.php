@@ -29,14 +29,7 @@ class BuyTwoGetOneFreeRepository implements OfferContract {
     }
 
     public function apply(){
-        $total_discount = 0;
-        foreach ($this->cart->products as $name => $product){
-            if ($name == $this->product->getName()) {
-                $total_discount = $this->countOdds(1, $product['quantity']) * $this->product->getPrice();
-            }
-        }
-
-        return $total_discount;
+        return $this->countOdds(1, $this->cart->products[$this->product->getName()]['quantity']) * $this->product->getPrice();
     }
 
 }
