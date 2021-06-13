@@ -64,7 +64,6 @@ class CartRepository{
     }
     public function calculateTotals(){
         $subTotal = 0;
-        $total = 0;
         foreach ($this->cart->products as $name => $product){
             $subTotal += $product['price'] * $product['quantity'];
             if(isset($product['offer'])){
