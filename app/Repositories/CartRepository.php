@@ -37,10 +37,7 @@ class CartRepository{
     }
 
     public function remove(Product $product, $quantity){
-        if(!isset($this->cart->products[$product->getName()])){
-            echo $product->getName() . " does not exists in cart\n";
-            return;
-        }
+        $this->checkExists($product);
         $current_quantity = $this->cart->getProductQuantity($product);
         if($current_quantity  >= $quantity){
             $current_quantity = $current_quantity - $quantity;
@@ -58,6 +55,7 @@ class CartRepository{
     }
 
     public function applyOffer($offer, Product $product){
+        $this->checkExists($product);
         $this->cart->products[$product->getName()]['offer'] = $offer;
         $this->calculateTotals();
         echo "Offer Added\n";
@@ -74,11 +72,19 @@ class CartRepository{
         }
         $this->cart->subTotal = RoundingHelper::bankersRound($subTotal, 2);
         $this->cart->total = RoundingHelper::bankersRound($subTotal - $this->cart->discount, 2);
+        dump($this->cart);
     }
     public function getBill(){
         echo 'Subtotal: '.$this->cart->subTotal.', Discount: '.$this->cart->discount.', Total: ' . $this->cart->total . "\n";
     }
     public function checkout(){
         echo 'Done';
+    }
+    public function checkExists(Product $product){
+        if(!isset($this->cart->products[$product->getName()])){
+            echo $product->getName() . " does not exists in cart\n";
+            return false;
+        }
+        return true;
     }
 }
