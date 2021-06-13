@@ -58,17 +58,20 @@ class CartRepository{
     }
 
     public function applyOffer($offer, Product $product){
-        $offer = config('offer.'.$offer);
-        $offerRepo = new $offer($this->cart, $product);
-        $this->cart->discount += $offerRepo->apply();
+        $this->cart->products[$product->getName()]['offer'] = $offer;
         $this->calculateTotals();
         echo "Offer Added\n";
     }
     public function calculateTotals(){
         $subTotal = 0;
         $total = 0;
-        foreach ($this->cart->products as $product){
+        foreach ($this->cart->products as $name => $product){
             $subTotal += $product['price'] * $product['quantity'];
+            if(isset($product['offer'])){
+                $offer = config('offer.'.$product['offer']);
+                $offerRepo = new $offer($this->cart, InventoryRepository::getInventory()->getProduct($name));
+                $this->cart->discount += $offerRepo->apply();
+            }
             $total += $product['price'] * $product['quantity'];
         }
         $this->cart->subTotal = RoundingHelper::bankersRound($subTotal, 2);
