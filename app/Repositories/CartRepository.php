@@ -72,7 +72,6 @@ class CartRepository{
         }
         $this->cart->subTotal = RoundingHelper::bankersRound($subTotal, 2);
         $this->cart->total = RoundingHelper::bankersRound($subTotal - $this->cart->discount, 2);
-        dump($this->cart);
     }
     public function getBill(){
         echo 'Subtotal: '.$this->cart->subTotal.', Discount: '.$this->cart->discount.', Total: ' . $this->cart->total . "\n";
