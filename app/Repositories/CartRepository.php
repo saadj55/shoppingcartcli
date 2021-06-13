@@ -72,10 +72,9 @@ class CartRepository{
                 $offerRepo = new $offer($this->cart, InventoryRepository::getInventory()->getProduct($name));
                 $this->cart->discount += $offerRepo->apply();
             }
-            $total += $product['price'] * $product['quantity'];
         }
         $this->cart->subTotal = RoundingHelper::bankersRound($subTotal, 2);
-        $this->cart->total = RoundingHelper::bankersRound($total - $this->cart->discount, 2);
+        $this->cart->total = RoundingHelper::bankersRound($subTotal - $this->cart->discount, 2);
     }
     public function getBill(){
         echo 'Subtotal: '.$this->cart->subTotal.', Discount: '.$this->cart->discount.', Total: ' . $this->cart->total . "\n";
